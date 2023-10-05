@@ -53,13 +53,20 @@ def unbounded_knapsack(W, weights, values):
 
 
 # Hàm xử lý sự kiện khi người dùng nhấn nút "Solve"
-def solve_knapsack():
+def solve_knapsack(problem_number):
     values = [int(value_entry.get()) for value_entry in value_entries]
     weights = [int(weight_entry.get()) for weight_entry in weight_entries]
     capacity = int(capacity_entry.get())
 
-    result = knapsack_backtracking(values, weights, capacity)
-    result_label.config(text=f"Giá trị lớn nhất có thể đạt được: {result}")
+    # result = knapsack_backtracking(values, weights, capacity)
+    # result_label.config(text=f"Giá trị lớn nhất có thể đạt được: {result}")
+
+    if problem_number == 1:
+        result = knapsack_backtracking(values, weights, capacity)
+        result_label.config(text=f"Kết quả bài toán {problem_number}: {result}")
+    elif problem_number == 2:
+        result = unbounded_knapsack(capacity, weights, values)
+        result_label.config(text=f"Kết quả bài toán {problem_number}: {result}")
 
 
 # Ví dụ minh họa
@@ -70,8 +77,8 @@ result = knapsack_backtracking(values, weights, capacity)
 print("Tổng giá trị lớn nhất có thể đạt được là:", result)
 print("*" * 50)
 W = 10
-weights = [2, 3, 4, 5]
-values = [3, 4, 5, 6]
+weights = [2, 3, 4]
+values = [3, 4, 5]
 print(unbounded_knapsack(W, weights, values))
 
 app = tk.Tk()
@@ -95,11 +102,23 @@ tk.Label(app, text="Sức chứa túi:").grid(row=num_items, column=0)
 capacity_entry = tk.Entry(app)
 capacity_entry.grid(row=num_items, column=1)
 
-solve_button = tk.Button(app, text="Solve", command=solve_knapsack)
-solve_button.grid(row=num_items + 1, column=0, columnspan=3)
+# solve_button = tk.Button(app, text="Solve", command=solve_knapsack)
+# solve_button.grid(row=num_items + 1, column=0, columnspan=3)
+
+# Nút "Solve" cho bài toán Knapsack with backtracking
+solve_button_1 = tk.Button(
+    app, text="Solve Problem 1", command=lambda: solve_knapsack(1)
+)
+solve_button_1.grid(row=num_items + 1, column=0, columnspan=3)
+
+# Nút "Solve" cho bài toán cái túi vô hạn
+solve_button_2 = tk.Button(
+    app, text="Solve Problem 2", command=lambda: solve_knapsack(2)
+)
+solve_button_2.grid(row=num_items + 2, column=0, columnspan=3)
 
 result_label = tk.Label(app, text="")
-result_label.grid(row=num_items + 2, column=0, columnspan=3)
+result_label.grid(row=num_items + 3, column=0, columnspan=3)
 
 # Chạy ứng dụng
 app.mainloop()
