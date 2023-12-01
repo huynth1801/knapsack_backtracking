@@ -71,6 +71,15 @@ def solve_knapsack():
         result = unbounded_knapsack(capacity, weights, values)
         result_label.config(text=f"Kết quả bài toán cái túi vô hạn: {result}")
 
+### Giai bai toan
+# Ví dụ minh họa
+values = [60, 100, 120]
+weights = [10, 20, 30]
+capacity = 50
+my_knapsack1 = BBKnapsack(capacity, values, weights)
+max_profit, max_solution = my_knapsack1.maximize()
+print("Kết quả sử dụng thư viện", max_profit)
+
 app = tk.Tk()
 app.title("Knapsack Solver")
 
