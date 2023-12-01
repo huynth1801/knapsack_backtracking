@@ -1,5 +1,8 @@
 import tkinter as tk
+from tkinter import StringVar
 from knapsack01.BBKnapsack import BBKnapsack
+from ortools.algorithms.python import knapsack_solver
+
 
 num_items = 0
 
@@ -53,20 +56,20 @@ def unbounded_knapsack(W, weights, values):
 
     return backtrack(0, 0, 0)
 
-
 # Hàm xử lý sự kiện khi người dùng nhấn nút "Solve"
-def solve_knapsack(problem_number):
+def solve_knapsack():
     values = [int(value_entry.get()) for value_entry in value_entries]
     weights = [int(weight_entry.get()) for weight_entry in weight_entries]
     capacity = int(capacity_entry.get())
 
-    if problem_number == 1:
-        result = knapsack_backtracking(values, weights, capacity)
-        result_label.config(text=f"Kết quả bài toán {problem_number}: {result}")
-    elif problem_number == 2:
-        result = unbounded_knapsack(capacity, weights, values)
-        result_label.config(text=f"Kết quả bài toán {problem_number}: {result}")
+    selected_problem = problem_var.get()
 
+    if selected_problem == "0/1 Knapsack":
+        result = knapsack_backtracking(values, weights, capacity)
+        result_label.config(text=f"Kết quả bài toán cái túi 0/1: {result}")
+    elif selected_problem == "Unbounded Knapsack":
+        result = unbounded_knapsack(capacity, weights, values)
+        result_label.config(text=f"Kết quả bài toán cái túi vô hạn: {result}")
 
 app = tk.Tk()
 app.title("Knapsack Solver")
@@ -76,6 +79,12 @@ num_items_label = tk.Label(app, text="Số lượng đối tượng:")
 num_items_label.grid(row=0, column=0)
 num_items_entry = tk.Entry(app)
 num_items_entry.grid(row=0, column=1)
+
+# Dropdown widget to select the knapsack problem
+problem_var = StringVar(app)
+problem_var.set("0/1 Knapsack")  # Default selection
+problem_dropdown = tk.OptionMenu(app, problem_var, "0/1 Knapsack", "Unbounded Knapsack")
+problem_dropdown.grid(row=0, column=2)
 
 value_entries = []
 weight_entries = []
@@ -109,7 +118,7 @@ def create_input_fields():
 
 # Nút "Tạo trường nhập liệu"
 create_fields_button = tk.Button(app, text="Tạo trường nhập liệu", command=create_input_fields)
-create_fields_button.grid(row=0, column=2)
+create_fields_button.grid(row=0, column=3)
 
 capacity_label = tk.Label(app, text="Sức chứa túi:")
 capacity_label.grid(row=0, column=4)
@@ -117,8 +126,9 @@ capacity_entry = tk.Entry(app)
 capacity_entry.grid(row=0, column=5)
 
 # Nút "Giải bài toán"
-solve_button = tk.Button(app, text="Giải bài toán", command=lambda: solve_knapsack(1))
+solve_button = tk.Button(app, text="Giải bài toán", command=solve_knapsack)
 solve_button.grid(row=0, column=6)
+
 result_label = tk.Label(app, text="")
 result_label.grid(row= 3 + 3, column=0, columnspan=3)
 
